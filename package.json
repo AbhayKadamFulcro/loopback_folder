@@ -50,6 +50,8 @@
   ],
   "dependencies": {
     "@apollo/client": "^3.11.4",
+    "@loopback/authentication": "^11.0.5",
+    "@loopback/authentication-jwt": "^0.15.5",
     "@loopback/boot": "^7.0.4",
     "@loopback/core": "^6.1.1",
     "@loopback/repository": "^7.0.4",

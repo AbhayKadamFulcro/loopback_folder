@@ -261,4 +261,27 @@ export class ArticleController {
 
     return newArticle;
   }
+
+  @post('/update_github')
+  @response(200, ARTICLE_RESPONSE)
+  async updateGithub(): Promise<any> {
+    let newArticle = {};
+
+    try {
+      await this.gitHubService.initializeRepository();
+
+      await this.gitHubService.cleanPostFolder();
+      await this.hugoContentService.generateContent();
+      await this.gitHubService.commitAndPushChanges(
+        `Updated content from generateContent ${Math.floor(Math.random() * 100011)}`,
+      );
+    } catch (err) {
+      console.error(
+        'An error occurred during the article posting process:',
+        err.message,
+      );
+    }
+
+    return newArticle;
+  }
 }
