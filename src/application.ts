@@ -11,7 +11,13 @@ import path from 'path';
 import {MySequence} from './sequence';
 import {GraphqlDataSource} from './datasources/graphql.datasource'; // Import the custom data source
 import {GraphqlService} from './services/graphql.service'; // Import the custom service
-import { GitHubService } from './services/github.service';
+import {GitHubService} from './services/github.service';
+
+import {AuthenticationComponent} from '@loopback/authentication';
+import {
+  JWTAuthenticationComponent,
+  UserServiceBindings,
+} from '@loopback/authentication-jwt';
 
 export {ApplicationConfig};
 
@@ -49,7 +55,11 @@ export class MyLoopbackAppApplication extends BootMixin(
     };
 
     // Register the custom DataSource
-    this.dataSource(GraphqlDataSource);
+    // this.dataSource(GraphqlDataSource);
+
+    this.component(AuthenticationComponent);
+    this.component(JWTAuthenticationComponent);
+    this.dataSource(GraphqlDataSource, UserServiceBindings.DATASOURCE_NAME);
 
     // Register the custom Service
     this.service(GraphqlService);

@@ -165,6 +165,7 @@ import {get, post, requestBody, response, ResponseObject} from '@loopback/rest';
 import {GraphqlService} from '../services/graphql.service';
 import {HugoContentService} from '../services/hugo-content.service';
 import {GitHubService} from '../services/github.service';
+import {authenticate} from '@loopback/authentication';
 
 const ARTICLE_RESPONSE: ResponseObject = {
   description: 'Article Response',
@@ -212,7 +213,7 @@ export class ArticleController {
 
     return this.graphqlService.fetchArticles();
   }
-
+  @authenticate('jwt')
   @post('/article')
   @response(200, ARTICLE_RESPONSE)
   async postArticle(
@@ -262,6 +263,7 @@ export class ArticleController {
     return newArticle;
   }
 
+  @authenticate('jwt')
   @post('/update_github')
   @response(200, ARTICLE_RESPONSE)
   async updateGithub(): Promise<any> {
