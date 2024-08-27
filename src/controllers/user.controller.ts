@@ -1,7 +1,7 @@
 // Uncomment these imports to begin using these cool features!
 
 // import {inject} from '@loopback/core';
-import { authenticate, TokenService } from '@loopback/authentication';
+import {authenticate, TokenService} from '@loopback/authentication';
 import {
   Credentials,
   MyUserService,
@@ -10,8 +10,8 @@ import {
   UserRepository,
   UserServiceBindings,
 } from '@loopback/authentication-jwt';
-import { inject } from '@loopback/core';
-import { model, property, repository } from '@loopback/repository';
+import {inject} from '@loopback/core';
+import {model, property, repository} from '@loopback/repository';
 import {
   get,
   getModelSchemaRef,
@@ -19,8 +19,8 @@ import {
   requestBody,
   SchemaObject,
 } from '@loopback/rest';
-import { SecurityBindings, securityId, UserProfile } from '@loopback/security';
-import { genSalt, hash } from 'bcryptjs';
+import {SecurityBindings, securityId, UserProfile} from '@loopback/security';
+import {genSalt, hash} from 'bcryptjs';
 import _ from 'lodash';
 
 @model()
@@ -51,10 +51,9 @@ export const RequestBody = {
   description: 'The input of login function',
   required: true,
   content: {
-    'application/json': { schema: UserSchema },
+    'application/json': {schema: UserSchema},
   },
 };
-
 
 export class UserController {
   constructor(
@@ -62,10 +61,10 @@ export class UserController {
     public jwtService: TokenService,
     @inject(UserServiceBindings.USER_SERVICE)
     public userService: MyUserService,
-    @inject(SecurityBindings.USER, { optional: true })
+    @inject(SecurityBindings.USER, {optional: true})
     public user: UserProfile,
     @repository(UserRepository) protected userRepository: UserRepository,
-  ) { }
+  ) {}
   @post('/signup', {
     responses: {
       '200': {
@@ -97,7 +96,7 @@ export class UserController {
       _.omit(newUserRequest, 'password'),
     );
 
-    await this.userRepository.userCredentials(savedUser.id).create({ password });
+    await this.userRepository.userCredentials(savedUser.id).create({password});
 
     return savedUser;
   }
@@ -123,34 +122,32 @@ export class UserController {
   })
   async signIn(
     @requestBody(RequestBody) credentials: Credentials,
-  ): Promise<{ token: string }> {
+  ): Promise<{token: string}> {
     const user = await this.userService.verifyCredentials(credentials);
     const userProfile = this.userService.convertToUserProfile(user);
     const token = await this.jwtService.generateToken(userProfile);
-    return { token };
+    return {token};
   }
 
   @authenticate('jwt')
-      @get('/whoami', {
-        responses: {
-          '200': {
-            description: 'Return current user',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'string',
-                },
-              },
+  @get('/whoami', {
+    responses: {
+      '200': {
+        description: 'Return current user',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'string',
             },
           },
         },
-      })
-      async whoAmI(
-        @inject(SecurityBindings.USER)
-        loggedInUserProfile: UserProfile,
-      ): Promise<string> {
-        return loggedInUserProfile[securityId];
-      }
-
-
+      },
+    },
+  })
+  async whoAmI(
+    @inject(SecurityBindings.USER)
+    loggedInUserProfile: UserProfile,
+  ): Promise<string> {
+    return loggedInUserProfile[securityId];
+  }
 }
