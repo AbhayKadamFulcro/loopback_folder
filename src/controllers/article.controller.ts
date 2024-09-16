@@ -198,12 +198,12 @@ export class ArticleController {
   @response(200, ARTICLE_RESPONSE)
   async getArticles(): Promise<any> {
     try {
-      await this.gitHubService.initializeRepository();
+      // await this.gitHubService.initializeRepository();
       await this.gitHubService.cleanPostFolder();
       await this.hugoContentService.generateContent();
-      await this.gitHubService.commitAndPushChanges(
-        `Updated content from generateContent ${Math.floor(Math.random() * 100011)}`,
-      );
+      // await this.gitHubService.commitAndPushChanges(
+      //   `Updated content from generateContent ${Math.floor(Math.random() * 100011)}`,
+      // );
     } catch (err) {
       console.error(
         'An error occurred during the article fetching process:',
@@ -239,7 +239,7 @@ export class ArticleController {
     let newArticle = {};
 
     try {
-      await this.gitHubService.initializeRepository();
+      // await this.gitHubService.initializeRepository();
 
       if (articleData.title && articleData.description) {
         newArticle = await this.graphqlService.createNewArticle(
@@ -250,9 +250,9 @@ export class ArticleController {
 
       await this.gitHubService.cleanPostFolder();
       await this.hugoContentService.generateContent();
-      await this.gitHubService.commitAndPushChanges(
-        `Updated content from generateContent ${Math.floor(Math.random() * 100011)}`,
-      );
+      // await this.gitHubService.commitAndPushChanges(
+      //   `Updated content from generateContent ${Math.floor(Math.random() * 100011)}`,
+      // );
     } catch (err) {
       console.error(
         'An error occurred during the article posting process:',
@@ -266,24 +266,25 @@ export class ArticleController {
   @authenticate('jwt')
   @post('/update_github')
   @response(200, ARTICLE_RESPONSE)
-  async updateGithub(): Promise<any> {
+  async updateGithub(@requestBody() body: any): Promise<any> {
+    //  // Clear any existing timer
+    // console.log('body', body);
     let newArticle = {};
 
     try {
-      await this.gitHubService.initializeRepository();
+      // await this.gitHubService.initializeRepository();
 
       await this.gitHubService.cleanPostFolder();
       await this.hugoContentService.generateContent();
-      await this.gitHubService.commitAndPushChanges(
-        `Updated content from generateContent ${Math.floor(Math.random() * 100011)}`,
-      );
+      // await this.gitHubService.commitAndPushChanges(
+      //   `Updated content from generateContent ${Math.floor(Math.random() * 100011)}`,
+      // );
     } catch (err) {
       console.error(
         'An error occurred during the article posting process:',
         err.message,
       );
     }
-
     return newArticle;
   }
 }

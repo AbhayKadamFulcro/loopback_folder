@@ -12,6 +12,14 @@ export class GraphqlService {
     return this.graphqlDataSource.fetchArticles();
   }
 
+  async fetchAllContentTypes(): Promise<any> {
+    return this.graphqlDataSource.fetchAllContentTypes();
+  }
+
+  async fethHomePageData(): Promise<any> {
+    return this.graphqlDataSource.fethHomePageData();
+  }
+
   async createNewArticle(title: String, description: String): Promise<any> {
     return this.graphqlDataSource.createNewArticle(title, description);
   }
